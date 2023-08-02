@@ -1,0 +1,2 @@
+# Get Database IDB
+./getIdb.sh -o 0xd837eA86bcd99b5258b1D08c1403ca77E561b71A -n hello_world | xargs -I {} curl https://provider.kwil.com/api/v1/databases/x{}/schema | jq .dataset.actions
