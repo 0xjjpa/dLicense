@@ -1,7 +1,6 @@
 import { Text, Box, Button, Flex } from "@chakra-ui/react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useWalletClient } from "wagmi";
-import { WebBundlr } from "@bundlr-network/client";
+import { useAccount, useSignMessage, useWalletClient } from "wagmi";
 
 import { Hero } from "../components/Hero";
 import { Container } from "../components/Container";
@@ -10,13 +9,16 @@ import { DarkModeSwitch } from "../components/DarkModeSwitch";
 import { Footer } from "../components/Footer";
 import { CTA } from "../components/CTA";
 import { useEffect, useState } from "react";
+import FileManager from "../components/FileManager/FileManager";
 
 const Index = () => {
-  const [currentBundlr, setBundlr] = useState<WebBundlr>();
-  const { data: walletClient, isError, isLoading } = useWalletClient()
+  const { data: signedMessage, isError, isLoading, isSuccess, signMessage } = useSignMessage({
+    message: 'gm wagmi frens',
+  })
   const account = useAccount();
 
   useEffect(() => {
+    console.log("Account", account);
     const loadBundlr = async () => {
       // const provider = {};
       // console.log("Loading Bundler w/Provider", provider);
@@ -25,16 +27,15 @@ const Index = () => {
       // setBundlr(bundlr);
     };
     account && loadBundlr();
-  }, [account, walletClient]);
+  }, [account]);
 
-  const handleDemoBundlrUpload = async () => {
-    const dataToUpload = "GM world."; // String to upload
-    console.log("Trying to upload...", currentBundlr);
+  useEffect(() => {
+    console.log("Signed Message", signedMessage);
+  }, [signedMessage])
+
+  const handleSignDemo = async () => {
     try {
-      if (currentBundlr) {
-        const response = await currentBundlr.upload(dataToUpload);
-        console.log(`Data uploaded ==> https://arweave.net/${response.id}`);
-      }
+      signMessage();
     } catch (e) {
       console.log("Error uploading file ", e);
     }
@@ -58,10 +59,12 @@ const Index = () => {
           <ConnectButton />
         </Flex>
 
-        {account && (
+        <FileManager />
+
+        {account?.address && (
           <>
-            <Button onClick={handleDemoBundlrUpload}>
-              Upload sample to Bundlr
+            <Button onClick={handleSignDemo}>
+              Sign something.
             </Button>
           </>
         )}
