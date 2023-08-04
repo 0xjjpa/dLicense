@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { useLocalStorage } from 'usehooks-ts'
 import { Flex, IconButton, Text, Input, Box, Icon } from "@chakra-ui/react";
 import { NotAllowedIcon } from "@chakra-ui/icons";
 import { PiUploadDuotone } from 'react-icons/pi'
