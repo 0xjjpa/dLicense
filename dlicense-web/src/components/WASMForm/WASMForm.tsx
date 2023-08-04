@@ -12,8 +12,25 @@ export const WASMForm = () => {
   const [projectName, setProjectName] = useState('')
   const [paymentAddress, setPaymentAddress] = useState('')
 
+  const sendFile = async () => {
+    console.log("FILE", file);
+    const formData = new FormData();
+    const blob = new Blob([file], {type: 'application/wasm'});
+    formData.append('file', blob, file.name);
+    formData.append('name', projectName);
+    formData.append('address', paymentAddress);
+
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    console.log("RESPONSE", res);
+    // const data = await res.json();
+    // console.log("Data", data);
+  }
+
   useEffect(() => {
-    console.log("Signed Message", signedMessage);
+    signedMessage && sendFile();
   }, [signedMessage])
 
   useEffect(() => {
@@ -22,7 +39,12 @@ export const WASMForm = () => {
 
   const handleSignDemo = async () => {
     try {
-      setMessageToSign(`Submitting ${projectName} with payment address ${paymentAddress}`);
+      if (!signedMessage) {
+        setMessageToSign(`Submitting ${projectName} with payment address ${paymentAddress}`);
+      } else {
+        sendFile();
+      }
+      
     } catch (e) {
       console.log("Error uploading file ", e);
     }

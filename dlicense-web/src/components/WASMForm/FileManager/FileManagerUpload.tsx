@@ -22,12 +22,9 @@ export const FileManagerUpload = () => {
     if (event.target.files && event.target.files[0]) {
       const file = (event.target as HTMLInputElement).files[0];
       setFileName(file.name);
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        dispatch({ type: 'SET_SOFTWARE_BINARY_FILE', payload: fileReader.result });
-        useWASMStore.setState({ file: fileReader.result })
-      };
-      fileReader.readAsBinaryString(file);
+      dispatch({ type: 'SET_SOFTWARE_BINARY_FILE', payload: file });
+      useWASMStore.setState({ file });
+      
     }
   };
 

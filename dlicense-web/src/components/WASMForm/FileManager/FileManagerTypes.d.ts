@@ -1,7 +1,7 @@
 export interface FileManagerState {
-  softwareBinary: ArrayBuffer | string;
+  softwareBinary: File;
 }
 
 export type FileManagerAction =
-  | { type: 'SET_SOFTWARE_BINARY_FILE'; payload: ArrayBuffer | string }
+  | { type: 'SET_SOFTWARE_BINARY_FILE'; payload: File }
   | { type: 'REMOVE_SOFTWARE_BINARY_FILE'; }
