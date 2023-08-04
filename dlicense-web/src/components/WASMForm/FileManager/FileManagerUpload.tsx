@@ -1,11 +1,16 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { FileManagerContext } from "./FileManagerContext";
-import { Button, Flex, IconButton, Text, Input, Box, Icon } from "@chakra-ui/react";
+import { useLocalStorage } from 'usehooks-ts'
+import { Flex, IconButton, Text, Input, Box, Icon } from "@chakra-ui/react";
 import { NotAllowedIcon } from "@chakra-ui/icons";
 import { PiUploadDuotone } from 'react-icons/pi'
 
+import { FileManagerContext } from "./FileManagerContext";
+import { useWASMStore } from "../WASMStore";
+
+
 export const FileManagerUpload = () => {
   const context = useContext(FileManagerContext);
+
   const [fileName, setFileName] = useState("");
   if (!context) throw new Error("FIELUploadCer must be used within a FIELStoreProvider");
 
@@ -21,6 +26,7 @@ export const FileManagerUpload = () => {
       const fileReader = new FileReader();
       fileReader.onload = () => {
         dispatch({ type: 'SET_SOFTWARE_BINARY_FILE', payload: fileReader.result });
+        useWASMStore.setState({ file: fileReader.result })
       };
       fileReader.readAsBinaryString(file);
     }
@@ -68,7 +74,7 @@ export const FileManagerUpload = () => {
           <Flex gap='2'>
             <Text fontFamily={'mono'} fontSize={'md'}>{fileName}</Text>
             <IconButton
-              onClick={() => dispatch({ type: 'REMOVE_SOFTWARE_BINARY_FILE' })}
+              onClick={() => { dispatch({ type: 'REMOVE_SOFTWARE_BINARY_FILE' }); useWASMStore.setState({ file: null }) }}
               isRound={true}
               variant='solid'
               colorScheme='red'
