@@ -10,6 +10,7 @@ import { Footer } from "../components/Footer";
 import { CTA } from "../components/CTA";
 import { useEffect, useState } from "react";
 import FileManager from "../components/FileManager/FileManager";
+import { WASMForm } from "../components/WASMForm/WASMForm";
 
 const Index = () => {
   const { data: signedMessage, isError, isLoading, isSuccess, signMessage } = useSignMessage({
@@ -59,12 +60,11 @@ const Index = () => {
           <ConnectButton />
         </Flex>
 
-        <FileManager />
-
         {account?.address && (
           <>
+            <WASMForm />
             <Button onClick={handleSignDemo}>
-              Sign something.
+              Submit form.
             </Button>
           </>
         )}

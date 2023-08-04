@@ -9,7 +9,7 @@ function FileManager() {
   });
   return (
     <Flex justifyContent={'center'}>
-      <Box mb="2">
+      <Box width='100%' mb="2">
         <FileManagerContext.Provider value={[state, dispatch]}>
           <FileManagerUpload />
         </FileManagerContext.Provider>

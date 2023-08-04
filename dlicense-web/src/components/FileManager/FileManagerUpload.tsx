@@ -1,7 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { FileManagerContext } from "./FileManagerContext";
-import { Button, Flex, IconButton, Text, Input } from "@chakra-ui/react";
+import { Button, Flex, IconButton, Text, Input, Box, Icon } from "@chakra-ui/react";
 import { NotAllowedIcon } from "@chakra-ui/icons";
+import { PiUploadDuotone } from 'react-icons/pi'
 
 export const FileManagerUpload = () => {
   const context = useContext(FileManagerContext);
@@ -34,30 +35,54 @@ export const FileManagerUpload = () => {
   };
 
   return (
-    softwareBinary ?
-      <Flex gap='2'>
-        <Text fontFamily={'mono'} fontSize={'md'}>{fileName}</Text>
-        <IconButton
-          onClick={() => dispatch({ type: 'REMOVE_SOFTWARE_BINARY_FILE' })}
-          isRound={true}
-          variant='solid'
-          colorScheme='red'
-          aria-label='Remove'
-          size={'xs'}
-          icon={<NotAllowedIcon />}
-        />
-      </Flex> : <div>
-        <Input
-          type="file"
-          ref={hiddenFileInput}
-          onChange={handleFileUpload}
-          accept=".wasm"
-          style={{ display: "none" }}
-        />
-        <Button
-          onClick={handleClickFileUpload}
-          aria-label="file upload"
-        >Upload .wasm</Button>
-      </div>
+
+    <Box>
+      <Input
+        type="file"
+        ref={hiddenFileInput}
+        onChange={handleFileUpload}
+        accept=".wasm"
+        style={{ display: "none" }}
+      />
+      <Flex
+        cursor={'pointer'}
+        onClick={() => !softwareBinary && handleClickFileUpload()}
+        aria-label="file upload"
+        bg='gray.100'
+        p='10'
+        minH='200'
+        textAlign={'center'}
+        rounded={'md'}
+        flexDir={'column'}
+        justify={'center'}
+        alignItems={'center'}
+        _hover={{ bg: 'gray.200' }}
+        _dark={{
+          bg: 'none',
+          color: 'white',
+          borderColor: 'white.900',
+          borderWidth: '1px'
+        }}
+      >
+        {softwareBinary ?
+          <Flex gap='2'>
+            <Text fontFamily={'mono'} fontSize={'md'}>{fileName}</Text>
+            <IconButton
+              onClick={() => dispatch({ type: 'REMOVE_SOFTWARE_BINARY_FILE' })}
+              isRound={true}
+              variant='solid'
+              colorScheme='red'
+              aria-label='Remove'
+              size={'xs'}
+              icon={<NotAllowedIcon />}
+            />
+          </Flex> :
+          <>
+            <Text fontFamily={'mono'} mb='2'>Upload your WASM library.</Text>
+            <Icon as={PiUploadDuotone} />
+          </>
+        }
+      </Flex>
+    </Box>
   )
 }

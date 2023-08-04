@@ -12,6 +12,7 @@ export const CTA = () => (
     width="full"
     maxWidth="3xl"
     py={3}
+    bg='whiteAlpha.900'
   >
     <Link href="/developers" passHref>
       <Button
