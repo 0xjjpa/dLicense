@@ -10,4 +10,4 @@ server:
 	python -m http.server
 
 run: main_nojs.go
-	go run main_nojs.go -key your_license_key_here
+	go run main_nojs.go -address 0x2464A7Ec6516ef7245EB2259BfE8FC1DD1589aB3

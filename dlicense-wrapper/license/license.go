@@ -22,18 +22,20 @@ type ResponseItem struct {
 }
 
 // Validate accepts a license key and returns an error if it's invalid.
-func Validate(licenseKey string) bool {
+func Validate(address string) (bool, string) {
 		// Hardcoded query.json content
+        fmt.Println("Address:", address)
+
 		query := Query{
 			Dbid:  "x536af46211ef06bed9e4c1ea3ad30959a4332c0d58d1423c7e853db3",
-			Query: "SELECT * FROM licenses",
+            Query: "SELECT * FROM licenses WHERE licensee_address = '" + address + "'",
 		}
 	
 		// Convert query to JSON
 		queryJSON, err := json.Marshal(query)
 		if err != nil {
 			fmt.Println("Error marshaling query:", err)
-			return false
+			return false, "Internal Error: Error marshaling query"
 		}
 	
 		// Create HTTP POST request
@@ -41,7 +43,7 @@ func Validate(licenseKey string) bool {
 		req, err := http.NewRequest("POST", url, bytes.NewBuffer(queryJSON))
 		if err != nil {
 			fmt.Println("Error creating request:", err)
-			return false
+			return false, "Internal Error: Error creating request"
 		}
 	
 		// Add content type header
@@ -52,7 +54,7 @@ func Validate(licenseKey string) bool {
 		resp, err := client.Do(req)
 		if err != nil {
 			fmt.Println("Error making request:", err)
-			return false
+			return false, "Internal Error: Error making request"
 		}
 		defer resp.Body.Close()
 	
@@ -60,7 +62,7 @@ func Validate(licenseKey string) bool {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			fmt.Println("Error reading response:", err)
-			return false
+			return false, "Internal Error: Error reading response"
 		}
 	
 		// Parse the response to get the base64 encoded result
@@ -68,14 +70,14 @@ func Validate(licenseKey string) bool {
 		err = json.Unmarshal(body, &response)
 		if err != nil {
 			fmt.Println("Error parsing response:", err)
-			return false
+			return false, "Internal Error: Error parsing response"
 		}
 	
 		result := response["result"]
 		decodedResult, err := base64.StdEncoding.DecodeString(result)
 		if err != nil {
 			fmt.Println("Error decoding base64:", err)
-			return false
+			return false, "Internal Error: Error decoding base64"
 		}
 	
 		// Unmarshal the decoded result into a slice of ResponseItem
@@ -83,7 +85,7 @@ func Validate(licenseKey string) bool {
 		err = json.Unmarshal(decodedResult, &responseItems)
 		if err != nil {
 			fmt.Println("Error unmarshaling response items:", err)
-			return false
+			return false, "Internal Error: Error unmarshaling response items"
 		}
 	
 		// Process response items
@@ -91,5 +93,11 @@ func Validate(licenseKey string) bool {
 			fmt.Printf("ID: %s, Licensee Address: %s, Software ID: %d, Transaction Hash: %s\n", item.ID, item.LicenseeAddress, item.SoftwareID, item.TransactionHash)
 		}
 
-	return true
+        if len(responseItems) == 0 {
+            fmt.Println("No license found for the provided key")
+            return false, "No license found for the provided key"
+        }
+    
+        // Return the TransactionHash of the first item, assuming there's only one relevant result
+        return true, responseItems[0].TransactionHash
 }

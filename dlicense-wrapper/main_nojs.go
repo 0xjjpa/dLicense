@@ -10,21 +10,21 @@ import (
 )
 
 func main() {
-	var licenseKey string
-	flag.StringVar(&licenseKey, "key", "", "The license key to validate")
+	var clientAddress string
+	flag.StringVar(&clientAddress, "address", "", "The license key to validate")
 	flag.Parse()
 
-	if licenseKey == "" {
+	if clientAddress == "" {
 		fmt.Println("No license key provided. Use the -key flag to provide a license key.")
 		return
 	}
 
-	isValid := license.Validate(licenseKey)
+	isValid, response := license.Validate(clientAddress)
 	if isValid != true {
-		fmt.Println("License is not valid")
+		fmt.Println("License is not valid", response)
 		return
 	}
-	fmt.Println("License is valid")
+	fmt.Println("License is valid", response)
 
 	// You can call your program function here
 	Program()
