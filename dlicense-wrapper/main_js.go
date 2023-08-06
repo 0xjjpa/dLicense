@@ -1,3 +1,4 @@
+//go:build js && wasm
 // +build js,wasm
 
 package main
@@ -25,17 +26,18 @@ func validateLicenseKey(this js.Value, args []js.Value) interface{} {
 		return jsError("No license key provided")
 	}
 
-	key := args[0].String()
+	address := args[0].String()
+	signature := args[1].String()
 	go func() {
-		isValid, response := license.Validate(key)
+		isValid, response := license.Validate(address, signature)
 		if isValid != true {
 			isLicenseValid = false
-			args[1].Invoke(jsError("License is not valid: " + response))
+			args[2].Invoke(jsError("License is not valid: " + response))
 		} else {
 			isLicenseValid = true
 			result := map[string]string{"transactionHash": response}
 			jsonResult, _ := json.Marshal(result)
-			args[1].Invoke(js.ValueOf(string(jsonResult)))
+			args[2].Invoke(js.ValueOf(string(jsonResult)))
 		}
 	}()
 	return nil
@@ -55,4 +57,3 @@ func jsError(message string) js.Value {
 	jsonResult, _ := json.Marshal(result)
 	return js.ValueOf(string(jsonResult))
 }
-

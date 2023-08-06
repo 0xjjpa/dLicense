@@ -14,10 +14,12 @@ async function loadWasm() {
 
 async function validateLicenseKey() {
     await loadWasm();
-    const licenseKey = document.querySelector("#license-key").value;
-    console.log("License Key", licenseKey);
+    const address = document.querySelector("#address").value;
+    const signature = document.querySelector("#signature").value;
+    console.log("Address", address);
+    console.log("Signature", signature);
     if (typeof window.validateLicenseKey === "function") {
-        const validationResult = await window.validateLicenseKey(licenseKey, function(result) {
+        await window.validateLicenseKey(address, signature, function(result) {
             console.log("Validation Result (inside)", result);
         });
     } else {
