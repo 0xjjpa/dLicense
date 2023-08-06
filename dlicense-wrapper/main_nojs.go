@@ -1,3 +1,4 @@
+//go:build !js && !wasm
 // +build !js,!wasm
 
 package main
@@ -10,27 +11,29 @@ import (
 )
 
 func main() {
-	var clientAddress string
-	flag.StringVar(&clientAddress, "address", "", "The license key to validate")
+	var signature string
+	var address string
+	flag.StringVar(&signature, "signature", "", "The signature to validate the software")
+	flag.StringVar(&address, "address", "", "The address of the signer")
 	flag.Parse()
 
-	if clientAddress == "" {
-		fmt.Println("No license key provided. Use the -key flag to provide a license key.")
+	if signature == "" {
+		fmt.Println("No signature provided. Use the -signature flag to validate your signature.")
 		return
 	}
 
-	isValid, response := license.Validate(clientAddress)
-	if isValid != true {
-		fmt.Println("License is not valid", response)
+	if address == "" {
+		fmt.Println("No address provided. Use the -address flag to validate your signature.")
+		return
+	}
+
+	isValid, response := license.Validate(address, signature)
+	if !isValid {
+		fmt.Println("License is not valid -", response)
 		return
 	}
 	fmt.Println("License is valid", response)
 
 	// You can call your program function here
 	Program()
-}
-
-// Add your Program function or call your desired function here
-func Program() {
-	fmt.Println("Running program.")
 }
