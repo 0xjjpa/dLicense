@@ -13,7 +13,7 @@ var addrNode = root.derive(path);
 var wallet = Wallet.fromPrivateKey(addrNode._privateKey);
 
 console.log("Private Key:", wallet.getPrivateKeyString());
-console.log("Account Address:", wallet.getAddressString());
+console.log("Account Address:", wallet.getChecksumAddressString());
 
 // Message to be signed
 var message = "Access request to library";
