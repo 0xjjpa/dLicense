@@ -1,0 +1,59 @@
+database dlicense;
+
+// table for storing software
+table software {
+    id int primary notnull, // UUIDv4 ID
+    name text notnull minlen(1) maxlen(100), // Name of the software
+    description text, // Description of the software
+    price text notnull minlen(1) maxlen(18), // Price of the software
+    payment_address text notnull, // Payment address
+    developer_address text notnull, // Creator address
+}
+
+// table for storing licenses
+table licenses {
+    id text primary notnull, // UUIDv4 ID
+    software_id int notnull, // ID of the Software purchased
+    licensee_address text notnull, // Account address of buyer
+    transaction_hash text notnull, // Transaction of the purchase
+}
+
+// A public action for creating a software
+action create_software($software_id, $name, $description, $price, $payment_address) public {
+    INSERT INTO software
+    VALUES ($software_id, $name, $description, $price, $payment_address, @caller);
+}
+
+// A public action for buying a software
+action buy_software($license_id, $software_id, $licensee_address, $transaction_hash) private {
+    INSERT INTO licenses
+    VALUES ($license_id, $software_id, $licensee_address, $transaction_hash);
+}
+
+// Getter for software by software ID
+action get_software_by_id($software_id) public {
+    SELECT *
+    FROM software
+    WHERE id = $software_id;
+}
+
+// Getter for license by license ID
+action get_license_by_id($license_id) public {
+    SELECT *
+    FROM licenses
+    WHERE id = $license_id;
+}
+
+// Getter for all software created by a developer
+action get_software_by_developer($developer_address) public {
+    SELECT *
+    FROM software
+    WHERE developer_address = $developer_address;
+}
+
+// Getter for all licenses a consumer has purchased
+action get_purchased_licenses() public {
+    SELECT *
+    FROM licenses
+    WHERE licensee_address = @caller;
+}
