@@ -17,12 +17,9 @@ async function validateLicenseKey() {
     const licenseKey = document.querySelector("#license-key").value;
     console.log("License Key", licenseKey);
     if (typeof window.validateLicenseKey === "function") {
-        const validationResult = await window.validateLicenseKey(licenseKey);
-        if (validationResult === "ok") {
-            console.log("License is valid");
-        } else {
-            console.log("License is not valid");
-        }
+        const validationResult = await window.validateLicenseKey(licenseKey, function(result) {
+            console.log("Validation Result (inside)", result);
+        });
     } else {
         console.log("validateLicenseKey function is not defined in the wasm module");
     }
