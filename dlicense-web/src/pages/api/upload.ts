@@ -35,7 +35,7 @@ export default function handler(
 
   apiRoute.use(multer({
     limits: {
-      fileSize: 5 * 1024 * 1024, // 5MB
+      fileSize: 20 * 1024 * 1024, // 20MB
       fieldSize: 2 * 1024 * 1024  // 2MB
     },
     storage: multer.memoryStorage()

@@ -3,12 +3,12 @@ const go = new Go();
 // Arweave HelloWASM id = _1ECa8i8RRQ_OlRKmofSffFExdoDk3EtPYdyIXtX12g
 
 // async function testLoadMain() {
-//     const res = await fetch ("https://arweave.net/_1ECa8i8RRQ_OlRKmofSffFExdoDk3EtPYdyIXtX12g");
+//     const res = await fetch ("https://arweave.net/ZeV0nyx4y61E4MgIQgnrfYSpynyMuQA12i6jAT7qwrE");
 //     console.log("RES", res);
 // }
 
 async function loadWasm() {
-    const result = await WebAssembly.instantiateStreaming(fetch('main.wasm'), go.importObject);
+    const result = await WebAssembly.instantiateStreaming(fetch('https://arweave.net/ZeV0nyx4y61E4MgIQgnrfYSpynyMuQA12i6jAT7qwrE'), go.importObject);
     go.run(result.instance);
 }
 
