@@ -11,18 +11,17 @@ export const WASMItem = ({ app }: { app: dLicenseApp }) => {
   const id = app.node.id;
 
   return (
-    <Flex borderWidth='1px' borderRadius='lg'>
+    <Flex borderWidth='1px' borderRadius='lg' _hover={{ bg: 'gray.50' }} cursor={'pointer'}>
       <Flex
         bg='gray.100'
         p='5'
-        maxH='sm'
+        w={'150px'}
         textAlign={'center'}
         rounded={'md'}
         m="2"
         flexDir={'column'}
         justify={'center'}
         alignItems={'center'}
-        _hover={{ bg: 'gray.200' }}
         _dark={{
           bg: 'none',
           color: 'white',

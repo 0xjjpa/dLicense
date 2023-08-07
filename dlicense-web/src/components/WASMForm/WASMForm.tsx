@@ -1,16 +1,18 @@
-import { Box, FormControl, Text, FormHelperText, FormLabel, Input, SimpleGrid, Flex, Button } from "@chakra-ui/react"
+import { Box, FormControl, Text, FormHelperText, FormLabel, Input, SimpleGrid, Flex, Button, useToast } from "@chakra-ui/react"
 import FileManager from "./FileManager/FileManager"
 import { useWASMStore } from "./WASMStore"
 import { useEffect, useState } from "react"
 import { useSignMessage, useAccount } from "wagmi"
 
 export const WASMForm = () => {
+  const toast = useToast()
   const [messageToSign, setMessageToSign] = useState("")
   const { data: signedMessage, signMessage } = useSignMessage({ message: messageToSign });
   const account = useAccount();
   const file = useWASMStore((state) => state.file)
   const [projectName, setProjectName] = useState('')
   const [paymentAddress, setPaymentAddress] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
 
   const sendFile = async () => {
     console.log("FILE", file);
@@ -20,13 +22,21 @@ export const WASMForm = () => {
     formData.append('name', projectName);
     formData.append('address', paymentAddress);
 
-    const res = await fetch('/api/upload', {
+    const res = await (await fetch('/api/upload', {
       method: 'POST',
       body: formData,
-    });
+    })).json()
     console.log("RESPONSE", res);
-    // const data = await res.json();
-    // console.log("Data", data);
+    setIsLoading(false);
+    if (res.response) {
+      toast({
+        title: 'Binary uploaded.',
+        description: `Application has been uploaded with id: ${res.response}`,
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      })
+    }
   }
 
   useEffect(() => {
@@ -72,7 +82,20 @@ export const WASMForm = () => {
           </Flex>
         </SimpleGrid>
         <>
-          <Button disabled={!file} opacity={!file && '0.5'} onClick={() => file && handleSignDemo()}>
+          <Button isLoading={isLoading} colorScheme={'blue'} disabled={!file} opacity={!file && '0.5'} onClick={() => {
+            setIsLoading(true);
+            file && handleSignDemo()
+            setTimeout(() => {
+              setIsLoading(false)
+              toast({
+                title: 'Binary upload timed out.',
+                description: `An error or something else timed out the upload.`,
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+              })
+            }, 10000);
+          }}>
             Submit form.
           </Button>
         </>

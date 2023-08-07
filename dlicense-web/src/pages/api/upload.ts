@@ -63,8 +63,6 @@ export default function handler(
       });
 
       const wallet = new Wallet(adminPrivateKey);
-      const kwiltx = await createSoftware({ name, address, wallet});
-      console.log('Kwil Tx', kwiltx);
 
       const bundlrTx = await bundlr.uploadWithReceipt(bufferArray, {
         tags: [
@@ -86,7 +84,11 @@ export default function handler(
       })
       console.log("Bundlr Tx", bundlrTx);
 
-      res.status(201).json({ response: 'ok' });
+      const softwareId = bundlrTx.id
+      const kwiltx = await createSoftware({ softwareId, name, address, wallet, });
+      console.log('Kwil Tx', kwiltx);
+
+      res.status(201).json({ response: bundlrTx.id });
     } catch (e) {
       console.error(e);
       res.status(500).json({ error: e.message });

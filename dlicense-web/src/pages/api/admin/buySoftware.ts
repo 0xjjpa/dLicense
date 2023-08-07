@@ -1,14 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Wallet } from 'ethers'
-import { createSoftware } from '../../../lib/kwil'
+import { buySoftware } from '../../../lib/kwil'
 import { KwilTxResponse } from '../../../types/kwil'
-import { randomUUID } from 'crypto'
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<KwilTxResponse | string>) {
   const {
     method,
-    body: { secret, name, address }
+    body: { secret, softwareId, transactionHash, address }
   } = req
 
   if (method != 'POST') return res.status(405).json({ err: 'Only POST method allowed.' })
@@ -19,8 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   if (!adminPrivateKey) return res.status(500).json({ err: 'Server does not have loaded a Bundlr private key.' })
 
   const wallet = new Wallet(adminPrivateKey);
-  const softwareId = randomUUID();
-  const response = await createSoftware({ softwareId, name, address, wallet });
+  const response = await buySoftware({ softwareId, transactionHash, address, wallet });
   
   console.log("Response", response);
 

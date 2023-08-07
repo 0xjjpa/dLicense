@@ -7,9 +7,9 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
+  goerli,
   mainnet,
   polygon,
-  polygonMumbai,
 } from "wagmi/chains";
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from "wagmi/providers/public";
@@ -18,7 +18,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
     polygon,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [polygonMumbai] : []),
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
   ],
   [
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID }),

@@ -5,6 +5,10 @@ export const GET_APPS_QUERY = `
         {
           name: "App-Name",
           values: ["dLicense"]
+        },
+        {
+          name: "App-Environment",
+          values: ["development"]
         }
       ],
     ) {

@@ -40,9 +40,9 @@ const Index = () => {
 
         <SimpleGrid columns={[1,1,2,2]} gap='2'>
         {
-          apps.map((app) => {
+          apps.length > 0 && apps.map((app) => {
             return (
-              <WASMItem app={app} />
+              <WASMItem key={app.node.id} app={app} />
             )
           })
         }
