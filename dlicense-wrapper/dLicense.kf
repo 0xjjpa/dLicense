@@ -2,7 +2,7 @@ database dlicense;
 
 // table for storing software
 table software {
-    id int primary notnull, // UUIDv4 ID
+    id text primary notnull, // UUIDv4 ID
     name text notnull minlen(1) maxlen(100), // Name of the software
     description text, // Description of the software
     price text notnull minlen(1) maxlen(18), // Price of the software
@@ -13,7 +13,7 @@ table software {
 // table for storing licenses
 table licenses {
     id text primary notnull, // UUIDv4 ID
-    software_id int notnull, // ID of the Software purchased
+    software_id text notnull, // ID of the Software purchased
     licensee_address text notnull, // Account address of buyer
     transaction_hash text notnull, // Transaction of the purchase
 }
