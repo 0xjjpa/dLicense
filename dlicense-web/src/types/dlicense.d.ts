@@ -1,5 +1,9 @@
 export type dLicenseUDL = "Title" | "Content-Type" | "App-Name" | "License" | "License-Fee" | "Currency" | "Payment-Address";
 
+export type dLicenseTagsMap = {
+  [K in dLicenseUDL]: string
+}
+
 export type dLicenseTagUDL = {
   name: dLicenseUDL,
   value: string,

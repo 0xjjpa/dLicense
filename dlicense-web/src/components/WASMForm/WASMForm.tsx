@@ -7,6 +7,7 @@ import { useSignMessage, useAccount } from "wagmi"
 export const WASMForm = () => {
   const toast = useToast()
   const [messageToSign, setMessageToSign] = useState("")
+  const [timeoutInterval, setTimeoutInterval] = useState<NodeJS.Timeout>();
   const { data: signedMessage, signMessage } = useSignMessage({ message: messageToSign });
   const account = useAccount();
   const file = useWASMStore((state) => state.file)
@@ -28,6 +29,10 @@ export const WASMForm = () => {
     })).json()
     console.log("RESPONSE", res);
     setIsLoading(false);
+    if (timeoutInterval) {
+      clearTimeout(timeoutInterval);
+      setTimeoutInterval(null);
+    }
     if (res.response) {
       toast({
         title: 'Binary uploaded.',
@@ -85,7 +90,7 @@ export const WASMForm = () => {
           <Button isLoading={isLoading} colorScheme={'blue'} disabled={!file} opacity={!file && '0.5'} onClick={() => {
             setIsLoading(true);
             file && handleSignDemo()
-            setTimeout(() => {
+            const timeout = setTimeout(() => {
               setIsLoading(false)
               toast({
                 title: 'Binary upload timed out.',
@@ -95,6 +100,7 @@ export const WASMForm = () => {
                 isClosable: true,
               })
             }, 10000);
+            setTimeoutInterval(timeout);
           }}>
             Submit form.
           </Button>

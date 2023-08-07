@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { Wallet } from 'ethers'
 import { buySoftware } from '../../../lib/kwil'
 import { KwilTxResponse } from '../../../types/kwil'
+import { randomUUID } from 'crypto'
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<KwilTxResponse | string>) {
@@ -18,7 +19,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   if (!adminPrivateKey) return res.status(500).json({ err: 'Server does not have loaded a Bundlr private key.' })
 
   const wallet = new Wallet(adminPrivateKey);
-  const response = await buySoftware({ softwareId, transactionHash, address, wallet });
+  const licenseId = randomUUID();
+  const response = await buySoftware({ licenseId, softwareId, transactionHash, address, wallet });
   
   console.log("Response", response);
 

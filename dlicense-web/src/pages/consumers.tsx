@@ -1,4 +1,4 @@
-import { Text, Box, SimpleGrid, } from "@chakra-ui/react";
+import { Text, Box, SimpleGrid, Flex } from "@chakra-ui/react";
 
 import { Hero } from "../components/Hero";
 import { Container } from "../components/Container";
@@ -6,22 +6,42 @@ import { Main } from "../components/Main";
 import { DarkModeSwitch } from "../components/DarkModeSwitch";
 import { Footer } from "../components/Footer";
 import { CTA } from "../components/CTA";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getApps } from "../lib/dlicense";
 import { WASMItem } from "../components/WASMForm/WASMItem";
 import { GraphQLApps, dLicenseApp } from "../types/dlicense";
+import { WASMSelectedItem } from "../components/WASMForm/WASMSelectedItem";
+import { RepeatIcon, SpinnerIcon } from "@chakra-ui/icons";
 
 
 const Index = () => {
   const [apps, setApps] = useState<dLicenseApp[]>([]);
+  const [isLoadingRefresh, setIsLoadingRefresh] = useState(false);
+  const [selectedWASMItem, setSelectedWASMItem] = useState<dLicenseApp>();
+
+  const loadApps = useCallback(async () => {
+    const appsData: GraphQLApps = await getApps();
+    const apps = appsData.data.transactions.edges;
+    setApps(apps);
+  }, [apps])
+
   useEffect(() => {
-    const loadApps = async () => {
-      const appsData: GraphQLApps = await getApps();
-      const apps = appsData.data.transactions.edges;
-      setApps(apps);
-    }
     loadApps();
   }, [])
+
+  const handleSelectWASMItem = (app: dLicenseApp) => {
+    console.log("App", app);
+    setSelectedWASMItem(app);
+  }
+
+  const handleRefresh = async () => {
+    setIsLoadingRefresh(true);
+    const timeout = setTimeout(() => setIsLoadingRefresh(false), 10000);
+    await loadApps();
+    setIsLoadingRefresh(false);
+    clearTimeout(timeout);
+  }
+
   return (
     <Container height="100vh">
       <Hero />
@@ -38,15 +58,33 @@ const Index = () => {
           </Text>
         </Box>
 
-        <SimpleGrid columns={[1,1,2,2]} gap='2'>
+
         {
-          apps.length > 0 && apps.map((app) => {
-            return (
-              <WASMItem key={app.node.id} app={app} />
-            )
-          })
+          apps.length > 0 ? (
+            <SimpleGrid columns={[1, 1, 2, 2]} gap='2'>
+              {
+                apps.map((app) => {
+                  return (
+                    <Box key={app.node.id} onClick={() => handleSelectWASMItem(app)}>
+                      <WASMItem app={app} />
+                    </Box>
+                  )
+                })
+              }
+            </SimpleGrid>)
+            :
+            <Flex justifyContent={'center'} alignItems={'center'}>
+              <Text fontSize={'md'} textAlign={'center'}>No apps had been found in this category.</Text>
+              {!isLoadingRefresh ? <RepeatIcon ml='2' onClick={handleRefresh} cursor={'pointer'} /> : <SpinnerIcon ml='2' /> }
+            </Flex>
         }
-        </SimpleGrid>
+
+
+        {selectedWASMItem &&
+          <Box>
+            <WASMSelectedItem app={selectedWASMItem} />
+          </Box>
+        }
       </Main>
 
       <DarkModeSwitch />

@@ -5,6 +5,7 @@ import Bundlr from "@bundlr-network/client";
 import { Wallet } from 'ethers'
 
 import { createSoftware } from "../../lib/kwil";
+import { BUNDLR_DLICENSE_APP_ENVIRONMENT } from "../../constants/bundlr";
 
 
 interface ExtendedRequest {
@@ -69,7 +70,7 @@ export default function handler(
           { name: "Title", value: name },
           { name: "Content-Type", value: req.file.mimetype },
           { name: "App-Name", value: "dLicense" },
-          { name: "App-Environment", value: "development" },
+          { name: "App-Environment", value: BUNDLR_DLICENSE_APP_ENVIRONMENT },
           {
             name: "License",
             value: "yRj4a5KMctX_uOmKWCFJIjmY8DeJcusVk6-HzLiM_t8",

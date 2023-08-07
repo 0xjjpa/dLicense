@@ -1,5 +1,5 @@
 export type KwilSoftware = {
-  id: number
+  id: string
   name: string
   description: string
   price: string

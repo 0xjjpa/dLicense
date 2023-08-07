@@ -1,13 +1,11 @@
 import { Badge, Box, Text, Flex } from "@chakra-ui/react"
-import { dLicenseApp, dLicenseUDL } from "../../types/dlicense"
+import { dLicenseApp, dLicenseTagsMap } from "../../types/dlicense"
 import { parseLicenseFee } from "../../helpers/udl"
+import { abbreviate } from "../../helpers/strings"
 
-type TagsMap = {
-  [K in dLicenseUDL]: string
-}
 
 export const WASMItem = ({ app }: { app: dLicenseApp }) => {
-  const tags = app.node.tags.reduce((prev, curr) => ({ [curr.name]: curr.value, ...prev }), {} as TagsMap);
+  const tags = app.node.tags.reduce((prev, curr) => ({ [curr.name]: curr.value, ...prev }), {} as dLicenseTagsMap);
   const id = app.node.id;
 
   return (
@@ -39,7 +37,7 @@ export const WASMItem = ({ app }: { app: dLicenseApp }) => {
             letterSpacing='wide'
             fontSize='xs'
           >
-            {`${id.substring(0, 20)}...`}
+            {`${abbreviate(id)}`}
           </Box>
         </Box>
 
@@ -64,7 +62,7 @@ export const WASMItem = ({ app }: { app: dLicenseApp }) => {
         </Box>
 
         <Box display='flex' mt='2' alignItems='center'>
-          <Text fontFamily={'mono'} fontSize={'xs'}>{`${tags["Payment-Address"].substring(0, 6)}...${tags["Payment-Address"].substring(tags["Payment-Address"].length - 6, tags["Payment-Address"].length)}`}</Text>
+          <Text fontFamily={'mono'} fontSize={'xs'}>{`${abbreviate(tags["Payment-Address"])}`}</Text>
         </Box>
         <Box textAlign={'left'} mt="2">
           <Badge borderRadius='full' px='4' colorScheme='green'>

@@ -1,3 +1,5 @@
+import { BUNDLR_DLICENSE_APP_ENVIRONMENT } from "./bundlr";
+
 export const GET_APPS_QUERY = `
   {
     transactions(
@@ -8,7 +10,7 @@ export const GET_APPS_QUERY = `
         },
         {
           name: "App-Environment",
-          values: ["development"]
+          values: ["${BUNDLR_DLICENSE_APP_ENVIRONMENT}"]
         }
       ],
     ) {
