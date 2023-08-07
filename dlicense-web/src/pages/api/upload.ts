@@ -2,6 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import multer from "multer";
 import Bundlr from "@bundlr-network/client";
+import { Wallet } from 'ethers'
+
+import { createSoftware } from "../../lib/kwil";
+
 
 interface ExtendedRequest {
   file: {
@@ -58,11 +62,16 @@ export default function handler(
         providerUrl: process.env.BUNDLR_RPC_ENDPOINT,
       });
 
-      const tx = await bundlr.uploadWithReceipt(bufferArray, {
+      const wallet = new Wallet(adminPrivateKey);
+      const kwiltx = await createSoftware({ name, address, wallet});
+      console.log('Kwil Tx', kwiltx);
+
+      const bundlrTx = await bundlr.uploadWithReceipt(bufferArray, {
         tags: [
           { name: "Title", value: name },
           { name: "Content-Type", value: req.file.mimetype },
           { name: "App-Name", value: "dLicense" },
+          { name: "App-Environment", value: "development" },
           {
             name: "License",
             value: "yRj4a5KMctX_uOmKWCFJIjmY8DeJcusVk6-HzLiM_t8",
@@ -75,8 +84,7 @@ export default function handler(
           }
         ],
       })
-
-      console.log("Tx", tx);
+      console.log("Bundlr Tx", bundlrTx);
 
       res.status(201).json({ response: 'ok' });
     } catch (e) {

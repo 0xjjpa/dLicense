@@ -1,4 +1,3 @@
-import { StarIcon } from "@chakra-ui/icons"
 import { Badge, Box, Text, Flex } from "@chakra-ui/react"
 import { dLicenseApp, dLicenseUDL } from "../../types/dlicense"
 import { parseLicenseFee } from "../../helpers/udl"
@@ -8,20 +7,8 @@ type TagsMap = {
 }
 
 export const WASMItem = ({ app }: { app: dLicenseApp }) => {
-  const property = {
-    imageUrl: 'https://bit.ly/2Z4KKcF',
-    imageAlt: 'Rear view of modern home with pool',
-    beds: 3,
-    baths: 2,
-    title: 'Modern home in city center in the heart of historic Los Angeles',
-    formattedPrice: '$1,900.00',
-    reviewCount: 34,
-    rating: 4,
-  }
-
   const tags = app.node.tags.reduce((prev, curr) => ({ [curr.name]: curr.value, ...prev }), {} as TagsMap);
   const id = app.node.id;
-  console.log("Tags", tags);
 
   return (
     <Flex borderWidth='1px' borderRadius='lg'>
