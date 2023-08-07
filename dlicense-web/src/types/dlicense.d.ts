@@ -1,4 +1,4 @@
-export type dLicenseUDL = "Title" | "Content-Type" | "App-Name" | "License" | "License-Fee" | "Currency" | "Payment-Address",
+export type dLicenseUDL = "Title" | "Content-Type" | "App-Name" | "License" | "License-Fee" | "Currency" | "Payment-Address";
 
 export type dLicenseTagUDL = {
   name: dLicenseUDL,
