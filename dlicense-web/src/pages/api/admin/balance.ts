@@ -1,8 +1,15 @@
 import Bundlr from '@bundlr-network/client'
+import { privateKeyToAccount } from 'viem/accounts'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { createPublicClient, formatEther, http } from 'viem'
+import { polygon } from 'viem/chains'
 
 type BalanceDataResponse = {
-  balance?: string
+  balance?: {
+    bundlr: string,
+    native: string,
+  }
+  address?: string
   err?: string
 }
 
@@ -18,12 +25,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   const adminPrivateKey = process.env.BUNDLR_PRIVATE_KEY;
   if (!adminPrivateKey) return res.status(500).json({ err: 'Server does not have loaded a Bundlr private key.' })
-  const bundlr = new Bundlr("http://devnet.bundlr.network", "matic", adminPrivateKey, {
-    providerUrl: "https://rpc-mumbai.maticvigil.com",
+  const bundlr = new Bundlr(process.env.BUNDLR_NODE_ENDPOINT, "matic", adminPrivateKey, {
+    providerUrl: process.env.BUNDLR_RPC_ENDPOINT,
   });
 
+  const account = privateKeyToAccount(adminPrivateKey as `0x${string}`)
+  const client = createPublicClient({
+    chain: polygon,
+    transport: http(),
+  })
+  const nativeBalance = await client.getBalance({ address: account.address })
   const atomicBalance = await bundlr.getLoadedBalance();
-  const balance = bundlr.utils.fromAtomic(atomicBalance).toString();
+  const bundlrBalance = bundlr.utils.fromAtomic(atomicBalance).toString();
 
-  return res.status(200).json({ balance })
+  return res.status(200).json({ address: account.address, balance: { bundlr: bundlrBalance, native: formatEther(nativeBalance) } })
 }

@@ -54,14 +54,15 @@ export default function handler(
 
       const adminPrivateKey = process.env.BUNDLR_PRIVATE_KEY;
       if (!adminPrivateKey) return res.status(500).json({ err: 'Server does not have loaded a Bundlr private key.' })
-      const bundlr = new Bundlr("http://devnet.bundlr.network", "matic", adminPrivateKey, {
-        providerUrl: "https://rpc-mumbai.maticvigil.com",
+      const bundlr = new Bundlr(process.env.BUNDLR_NODE_ENDPOINT, "matic", adminPrivateKey, {
+        providerUrl: process.env.BUNDLR_RPC_ENDPOINT,
       });
 
-      const tx = await bundlr.upload(bufferArray, {
+      const tx = await bundlr.uploadWithReceipt(bufferArray, {
         tags: [
           { name: "Title", value: name },
           { name: "Content-Type", value: req.file.mimetype },
+          { name: "App-Name", value: "dLicense" },
           {
             name: "License",
             value: "yRj4a5KMctX_uOmKWCFJIjmY8DeJcusVk6-HzLiM_t8",

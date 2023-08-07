@@ -1,11 +1,7 @@
 const go = new Go();
 
-// Arweave HelloWASM id = _1ECa8i8RRQ_OlRKmofSffFExdoDk3EtPYdyIXtX12g
-
-// async function testLoadMain() {
-//     const res = await fetch ("https://arweave.net/ZeV0nyx4y61E4MgIQgnrfYSpynyMuQA12i6jAT7qwrE");
-//     console.log("RES", res);
-// }
+// Arweave HelloWASM id (testnet) = _1ECa8i8RRQ_OlRKmofSffFExdoDk3EtPYdyIXtX12g
+// Arweave HelloWASM id (matic) = k8OQHZoUsGFm1XZdWa1FfU6sOSAA6gVsW9yBAWWPSzg
 
 async function loadWasm() {
     const result = await WebAssembly.instantiateStreaming(fetch('https://arweave.net/ZeV0nyx4y61E4MgIQgnrfYSpynyMuQA12i6jAT7qwrE'), go.importObject);

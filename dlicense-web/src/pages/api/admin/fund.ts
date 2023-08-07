@@ -18,8 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   const adminPrivateKey = process.env.BUNDLR_PRIVATE_KEY;
   if (!adminPrivateKey) return res.status(500).json({ err: 'Server does not have loaded a Bundlr private key.' })
-  const bundlr = new Bundlr("http://devnet.bundlr.network", "matic", adminPrivateKey, {
-    providerUrl: "https://rpc-mumbai.maticvigil.com",
+  const bundlr = new Bundlr(process.env.BUNDLR_NODE_ENDPOINT, "matic", adminPrivateKey, {
+    providerUrl: process.env.BUNDLR_RPC_ENDPOINT,
   });
   
   const response = await bundlr.fund(bundlr.utils.toAtomic('0.1'));
