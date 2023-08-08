@@ -90,17 +90,17 @@ export const WASMForm = () => {
           <Button isLoading={isLoading} colorScheme={'blue'} disabled={!file} opacity={!file && '0.5'} onClick={() => {
             setIsLoading(true);
             file && handleSignDemo()
-            const timeout = setTimeout(() => {
-              setIsLoading(false)
-              toast({
-                title: 'Binary upload timed out.',
-                description: `An error or something else timed out the upload.`,
-                status: 'error',
-                duration: 9000,
-                isClosable: true,
-              })
-            }, 10000);
-            setTimeoutInterval(timeout);
+            // const timeout = setTimeout(() => {
+            //   setIsLoading(false)
+            //   toast({
+            //     title: 'Binary upload timed out.',
+            //     description: `An error or something else timed out the upload.`,
+            //     status: 'error',
+            //     duration: 9000,
+            //     isClosable: true,
+            //   })
+            // }, 10000);
+            // setTimeoutInterval(timeout);
           }}>
             Submit form.
           </Button>

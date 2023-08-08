@@ -31,7 +31,6 @@ const Index = () => {
   }, [])
 
   const handleSelectWASMItem = (app: dLicenseApp) => {
-    console.log("App", app);
     setSelectedWASMItem(app);
   }
 
