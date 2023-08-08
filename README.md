@@ -12,6 +12,7 @@ successful payment using the Arweave UDL.
 ## Worflow
 
 ```
+dLicense
 ┌────────────────────────────────────────────────────────┐
 │                                                        │
 │    ┌───────┐                                           │
