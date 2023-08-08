@@ -55,3 +55,9 @@ financial rails such as credit cards.
 - [Bundlr](https://bundlr.network/) - For interacting with the Arweave network using EVM-compatible wallets.
 - [Kwil](https://www.kwil.com/) - For managing the state of the WASM licenses
 - [NextJs](https://nextjs.org/) - For developing the APIs and front-end of the app.
+
+## Tooling
+
+- **dlicense-web** - TypeScript/Node.js front-end and backend API for dLicense.
+- **dlicense-wrapper** - Golang wrapper for interacting with Kwil via Go.
+- **key-extractor** - Utility to fetch and process mnemonic based wallets.
