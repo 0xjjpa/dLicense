@@ -12,6 +12,7 @@ import { WASMItem } from "../components/WASMForm/WASMItem";
 import { GraphQLApps, dLicenseApp } from "../types/dlicense";
 import { WASMSelectedItem } from "../components/WASMForm/WASMSelectedItem";
 import { RepeatIcon, SpinnerIcon } from "@chakra-ui/icons";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 
 const Index = () => {
@@ -58,6 +59,9 @@ const Index = () => {
           </Text>
         </Box>
 
+        <Flex justifyContent={'center'}>
+          <ConnectButton />
+        </Flex>
 
         {
           apps.length > 0 ? (
